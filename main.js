@@ -1,18 +1,36 @@
+let deckId 
 function drawNewDeck(){
     fetch('https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/')
             .then(response => response.json())                      //method on promise
-            .then(data => console.log(data))                        //method on promise
+            .then(data =>{ 
+                console.log(data)
+                deckId = data.deck_id
+            })                        //method on promise
 }
+
 document.getElementById('new-deck-btn').addEventListener('click', drawNewDeck) //CallBack Function
+document.getElementById('draw-card-btn').addEventListener('click', () => {
+    fetch(`https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`)
+    .then(response => response.json())
+    .then(data =>{ 
+        console.log(data.cards)
+        document.getElementById('first-card').innerHTML = `
+        <img src=${data.cards[0].image} />
+        <img src=${data.cards[1].image} />
+        `
+    })
 
-function callBack(){
-    console.log("another card")
-}
-setTimeout(callBack, 2000)
-
-document.getElementById('new-deck-btn').addEventListener('click', function(){
-    console.log('new card baby')
 })
+
+
+// function callBack(){
+//     console.log("another card")
+// }
+// setTimeout(callBack, 2000)
+
+// document.getElementById('new-deck-btn').addEventListener('click', function(){
+//     console.log('new card baby')
+// })
 
 
 // ========================= Filter Array, Callback function ============================== //
