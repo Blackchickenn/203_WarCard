@@ -1,21 +1,26 @@
 let deckId 
+const cardContainer = document.getElementById('first-card')
+const newDeck = document.getElementById('new-deck-btn')
+const drawCards = document.getElementById('draw-card-btn')
+
 function drawNewDeck(){
     fetch('https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/')
             .then(response => response.json())                      //method on promise
             .then(data =>{ 
-                console.log(data)
                 deckId = data.deck_id
             })                        //method on promise
 }
 
-document.getElementById('new-deck-btn').addEventListener('click', drawNewDeck) //CallBack Function
-document.getElementById('draw-card-btn').addEventListener('click', () => {
+newDeck.addEventListener('click', drawNewDeck) //CallBack Function
+
+drawCards.addEventListener('click', () => {
     fetch(`https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`)
     .then(response => response.json())
     .then(data =>{ 
-        console.log(data.cards)
-        document.getElementById('first-card').innerHTML = `
+        cardContainer.children[0].innerHTML = `
         <img src=${data.cards[0].image} />
+        `
+        cardContainer.children[1].innerHTML = `
         <img src=${data.cards[1].image} />
         `
     })
