@@ -2,6 +2,7 @@ let deckId
 const cardContainer = document.getElementById('first-card')
 const newDeck = document.getElementById('new-deck-btn')
 const drawCards = document.getElementById('draw-card-btn')
+const showWinner = document.getElementById("determine-winner")
 
 function drawNewDeck(){
     fetch('https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/')
@@ -23,9 +24,35 @@ drawCards.addEventListener('click', () => {
         cardContainer.children[1].innerHTML = `
         <img src=${data.cards[1].image} />
         `
+        const winnerText = determineWinner(data.cards[0], data.cards[1])
+        showWinner.textContent = winnerText
+
     })
 
 })
+
+
+function determineWinner(card1, card2){
+    cardValue = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "ACE"]
+    card1Value = cardValue.indexOf(card1.value)
+    card2Value = cardValue.indexOf(card2.value)
+    if (card1Value > card2Value){
+        return "Computer wins"
+    } else if (card1Value < card2Value){
+        return "You win"
+    } else {
+        return "War"
+    }
+}
+
+const example1 = {
+    value: "9"
+}
+const example2 = {
+    value: "9"
+}
+
+determineWinner(example1, example2)
 
 
 // function callBack(){
