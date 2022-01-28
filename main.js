@@ -1,14 +1,22 @@
-let deckId 
+let deckId
+let computerScore = 0;
+let playerScore = 0;
 const cardContainer = document.getElementById('first-card')
 const newDeck = document.getElementById('new-deck-btn')
 const drawCards = document.getElementById('draw-card-btn')
 const showWinner = document.getElementById("determine-winner")
+const remainingCards = document.getElementById("remaining-cards")
+const computerScoreText = document.getElementById("computer")
+const playerScoreText = document.getElementById("player")
 
 function drawNewDeck(){
     fetch('https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/')
             .then(response => response.json())                      //method on promise
             .then(data =>{ 
                 deckId = data.deck_id
+                remainingCards.textContent =`
+                Remaining Cards: ${data.remaining}
+                `
             })                        //method on promise
 }
 
@@ -18,6 +26,10 @@ drawCards.addEventListener('click', () => {
     fetch(`https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`)
     .then(response => response.json())
     .then(data =>{ 
+        
+        remainingCards.textContent =`
+        Remaining Cards: ${data.remaining}
+        `
         cardContainer.children[0].innerHTML = `
         <img src=${data.cards[0].image} />
         `
@@ -26,7 +38,19 @@ drawCards.addEventListener('click', () => {
         `
         const winnerText = determineWinner(data.cards[0], data.cards[1])
         showWinner.textContent = winnerText
-
+        if(data.remaining === 0){
+            drawCards.disabled = true
+            drawCards.classList.remove("draw-card-btn")
+            drawCards.classList.add("draw-card-btn-no")
+            drawCards.textContent = `No more cards in a Deck! Draw a new one!`
+            if(computerScore > playerScore){
+                return showWinner.textContent = `Ivanka is a Loooooseeeeer`
+            } else if (playerScore > computerScore){
+                return showWinner.textContent = `Ivanka is the BEST`
+            } else {
+                return showWinner.textContent = `Tie`
+            }
+        }
     })
 
 })
@@ -36,10 +60,14 @@ function determineWinner(card1, card2){
     cardValue = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "ACE"]
     card1Value = cardValue.indexOf(card1.value)
     card2Value = cardValue.indexOf(card2.value)
-    if (card1Value > card2Value){
-        return "Computer wins"
+    if (card1Value > card2Value) {
+        computerScore++
+        computerScoreText.textContent = `Computer Score: ${computerScore}`
+        return "Computer win"
     } else if (card1Value < card2Value){
-        return "You win"
+        playerScore++
+        playerScoreText.textContent = `Ivanka Score: ${playerScore}`
+        return "Ivanka win"
     } else {
         return "War"
     }

@@ -13,6 +13,14 @@ body {
   align-items: center;
   color: white;
 }
+h2,
+h3 {
+  margin: 0;
+}
+h3 {
+  padding: 1em;
+}
+
 .new-deck-btn,
 .draw-card-btn {
   font-size: 1.5rem;
@@ -31,7 +39,16 @@ body {
   min-width: 100%;
   padding: 10px;
 }
-
+.draw-card-btn-no {
+  font-size: 1.5rem;
+  background-color: red;
+  border: none;
+  font-weight: 700;
+  cursor: not-allowed;
+  min-width: 100%;
+  padding: 10px;
+  color: yellow;
+}
 .card-slot {
   border: black 1px solid;
   height: 200px;
